@@ -50,6 +50,7 @@
 #include "ompl/base/spaces/DiscreteStateSpace.h"
 #include "ompl/base/spaces/ReedsSheppStateSpace.h"
 #include "ompl/base/spaces/DubinsStateSpace.h"
+#include "ompl/base/spaces/Dubins3DStateSpace.h"
 
 #include "ompl/base/spaces/special/TorusStateSpace.h"
 #include "ompl/base/spaces/special/SphereStateSpace.h"
@@ -93,6 +94,26 @@ BOOST_AUTO_TEST_CASE(ReedsShepp_Simple)
     bounds2.setLow(-3);
     bounds2.setHigh(3);
     d->setBounds(bounds2);
+
+    d->setup();
+    d->sanityChecks();
+}
+
+BOOST_AUTO_TEST_CASE(Dubins_3D_Simple)
+{
+    auto dDefault(std::make_shared<base::Dubins3DStateSpace>());
+    auto d(std::make_shared<base::Dubins3DStateSpace>(1.0, 
+        base::Dubins3DStateSpace::degToRad(-15), 
+        base::Dubins3DStateSpace::degToRad(15)));
+
+    base::RealVectorBounds bounds3(3);
+    bounds3.setLow(-3);
+    bounds3.setHigh(3);
+    dDefault->setBounds(bounds3);
+    d->setBounds(bounds3);
+
+    dDefault->setup();
+    dDefault->sanityChecks();
 
     d->setup();
     d->sanityChecks();
