@@ -825,7 +825,20 @@ ompl::base::DubinsStateSpace::DubinsPath ompl::base::DubinsStateSpace::dubins(co
     double x2 = s2->getX(), y2 = s2->getY(), th2 = s2->getYaw();
     double dx = x2 - x1, dy = y2 - y1, d = sqrt(dx * dx + dy * dy) / rho_, th = atan2(dy, dx);
     double alpha = mod2pi(th1 - th), beta = mod2pi(th2 - th);
-    return ::dubins(d, alpha, beta);
+    DubinsPath path = ::dubins(d, alpha, beta);
+    path.qi_ = {s1->getX(), s1->getY(), s1->getYaw()};
+    path.qf_ = {s2->getX(), s2->getY(), s2->getYaw()};
+    return path;
+}
+
+void ompl::base::DubinsStateSpace::setTurningRadius(const double rho)
+{
+    rho_ = rho;
+}
+
+double ompl::base::DubinsStateSpace::getTurningRadius() const
+{
+    return rho_;
 }
 
 void ompl::base::DubinsMotionValidator::defaultSettings()

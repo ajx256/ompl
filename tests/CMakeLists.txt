@@ -42,6 +42,7 @@ if (OMPL_BUILD_TESTS)
     add_ompl_test(test_state_spaces base/state_spaces.cpp)
     add_ompl_test(test_state_storage base/state_storage.cpp)
     add_ompl_test(test_planner_data base/planner_data.cpp)
+    add_ompl_test(test_dubins_3d base/dubins_3d_state_space.cpp)
 
     if(NOT MSVC)
       add_ompl_test(test_ptc base/ptc.cpp)

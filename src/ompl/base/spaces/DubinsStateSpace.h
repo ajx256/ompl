@@ -69,6 +69,14 @@ namespace ompl
                 DUBINS_RIGHT = 2
             };
 
+            /** \brief A struct for holding Dubins configurations. For specifying initial and final configurations along the path. */
+            struct Dubins2DConfiguration
+            {
+                double x{0.0};
+                double y{0.0};
+                double yaw{0.0};
+            };
+
             /** \brief Dubins path types */
             static const DubinsPathSegmentType dubinsPathType[6][3];
             /** \brief Complete description of a Dubins path */
@@ -76,8 +84,9 @@ namespace ompl
             {
             public:
                 DubinsPath(const DubinsPathSegmentType *type = dubinsPathType[0], double t = 0.,
-                           double p = std::numeric_limits<double>::max(), double q = 0.)
-                  : type_(type)
+                           double p = std::numeric_limits<double>::max(), double q = 0.,
+                           Dubins2DConfiguration qi={0,0,0}, Dubins2DConfiguration qf={0,0,0})
+                  : type_(type), qi_(qi), qf_(qf)
                 {
                     length_[0] = t;
                     length_[1] = p;
@@ -95,6 +104,10 @@ namespace ompl
                 const DubinsPathSegmentType *type_;
                 /** Path segment lengths */
                 double length_[3];
+                /** The initial configuration along the path */
+                Dubins2DConfiguration qi_;
+                /** The final configuration along the path */
+                Dubins2DConfiguration qf_;
                 /** Whether the path should be followed "in reverse" */
                 bool reverse_{false};
             };
@@ -140,6 +153,12 @@ namespace ompl
 
             /** \brief Return a shortest Dubins path from SE(2) state state1 to SE(2) state state2 */
             DubinsPath dubins(const State *state1, const State *state2) const;
+
+            /** \brief Set the turning radius used for computing Dubins paths */
+            void setTurningRadius(const double rho);
+
+            /** \brief Get the turning radius used for computing Dubins paths */
+            double getTurningRadius() const;
 
         protected:
             virtual void interpolate(const State *from, const DubinsPath &path, double t, State *state) const;
